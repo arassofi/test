@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="fa">
+<head>
+  <meta charset="UTF-8">
+  <title>لوکیشنت کجاست؟</title>
+  <style>
+    body {
+      font-family: sans-serif;
+      text-align: center;
+      margin-top: 50px;
+      direction: rtl;
+    }
+    button {
+      padding: 10px 20px;
+      font-size: 18px;
+      margin-top: 20px;
+      cursor: pointer;
+    }
+    #coords {
+      margin-top: 20px;
+      font-size: 16px;
+    }
+  </style>
+</head>
+<body>
+  <h1>👀 موقعیتت کجاست؟</h1>
+  <p>روی دکمه زیر بزن تا مختصاتت رو ببینی و بفرستی برای آراس 😁</p>
+  <button onclick="getLocation()">گرفتن مختصات</button>
+  <div id="coords"></div>
+  <div id="sendBtn" style="display: none; margin-top: 20px;"></div>
+
+  <script>
+    let latitude, longitude;
+
+    function getLocation() {
+      if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(showPosition, showError);
+      } else {
+        document.getElementById("coords").innerText = "مرورگر شما لوکیشن رو پشتیبانی نمی‌کنه.";
+      }
+    }
+
+    function showPosition(position) {
+      latitude = position.coords.latitude;
+      longitude = position.coords.longitude;
+      document.getElementById("coords").innerText =
+        `📍 مختصات شما:\nعرض: ${latitude}\nطول: ${longitude}`;
+      
+      // ساخت لینک تلگرام
+      const message = `مختصات من:\nعرض جغرافیایی: ${latitude}\nطول جغرافیایی: ${longitude}`;
+      const encoded = encodeURIComponent(message);
+      const telegramLink = `https://t.me/share/url?url=&text=${encoded}`;
+
+      document.getElementById("sendBtn").innerHTML = `
+        <a href="${telegramLink}" target="_blank">
+          <button>📤 ارسال به آراس در تلگرام</button>
+        </a>`;
+      document.getElementById("sendBtn").style.display = "block";
+    }
+
+    function showError(error) {
+      document.getElementById("coords").innerText = "خطا در دریافت مختصات.";
+    }
+  </script>
+</body>
+</html>
